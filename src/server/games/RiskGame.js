@@ -492,6 +492,9 @@ export class RiskGame extends MiniGame {
       `${participant.name}'s turn — Reinforce with ${this.reinforcementPool} troops.`,
       'system',
     );
+    if (Math.random() < 0.42) {
+      this._agentNarrate(this._buildTurnNarration(participant, this.reinforcementPool));
+    }
 
     this.turnActionAt = Date.now();
     this.nextAiActionAt = Date.now() + AI_ACTION_DELAY_MS;
@@ -662,6 +665,16 @@ export class RiskGame extends MiniGame {
       attackerLosses: combat.attackerLosses,
       defenderLosses: combat.defenderLosses,
     });
+    this._agentNarrate(
+      this._buildBattleNarration({
+        attackerName,
+        defenderName,
+        fromName: from.name,
+        toName: to.name,
+        attackerLosses: combat.attackerLosses,
+        defenderLosses: combat.defenderLosses,
+      }),
+    );
 
     if (to.troops <= 0) {
       const defenderId = to.ownerId;
@@ -681,6 +694,7 @@ export class RiskGame extends MiniGame {
       this._updateTerritoryVisual(to.id);
 
       this.announce(`${attackerName} conquered ${to.name}!`, 'challenge');
+      this._agentNarrate(`${attackerName} seizes ${to.name}. Momentum shifts!`);
 
       if (this.getOwnedTerritories(defenderId).length === 0) {
         this._eliminatePlayer(defenderId, playerId, `${defenderName} has been eliminated!`);
@@ -808,6 +822,7 @@ export class RiskGame extends MiniGame {
     eliminated.cards = [];
 
     this.announce(message || `${eliminated.name} has been eliminated.`, 'challenge');
+    this._agentNarrate(`${eliminated.name} is out of the war. The board grows deadlier.`);
   }
 
   _performAiStep(playerId) {
@@ -995,6 +1010,37 @@ export class RiskGame extends MiniGame {
 
   _syncGameStateSummary() {
     this.worldState.gameState.riskState = this._buildRiskState();
+  }
+
+  _agentNarrate(text) {
+    const message = this.worldState.addMessage('AI Game Master', 'agent', text);
+    this.broadcast('chat_message', message);
+  }
+
+  _buildTurnNarration(participant, reinforcements) {
+    const lines = [
+      `${participant.name}, choose your pressure point. ${reinforcements} reinforcements can make or break a continent.`,
+      `${participant.name} surveys the map — opportunity favors decisive reinforcement.`,
+      `Risk is positional warfare. ${participant.name} now controls the tempo.`,
+    ];
+    return lines[randomInt(lines.length)];
+  }
+
+  _buildBattleNarration({
+    attackerName,
+    defenderName,
+    fromName,
+    toName,
+    attackerLosses,
+    defenderLosses,
+  }) {
+    if (defenderLosses > attackerLosses) {
+      return `${attackerName} presses from ${fromName} into ${toName}. ${defenderName} is on the back foot.`;
+    }
+    if (attackerLosses > defenderLosses) {
+      return `${defenderName} holds ${toName}! ${attackerName}'s advance from ${fromName} stalls.`;
+    }
+    return `${fromName} and ${toName} trade blood evenly. Neither commander yields ground.`;
   }
 
   _broadcastRiskState(reason = 'update') {

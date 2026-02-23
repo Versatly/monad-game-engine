@@ -7,10 +7,12 @@ import { registerEntityHandlers } from './handlers/EntityHandlers.js';
 import { registerPlayerHandlers } from './handlers/PlayerHandlers.js';
 import { registerGameStateHandlers } from './handlers/GameStateHandlers.js';
 import { registerEffectHandlers } from './handlers/EffectHandlers.js';
+import { registerRiskHandlers } from './handlers/RiskHandlers.js';
 
 export function registerMessageHandlers(room, { clearSpectating }) {
   registerEntityHandlers(room);
   registerPlayerHandlers(room, { clearSpectating });
   registerGameStateHandlers(room, { clearSpectating });
   registerEffectHandlers(room);
+  registerRiskHandlers(room);
 }

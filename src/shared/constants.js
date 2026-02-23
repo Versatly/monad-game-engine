@@ -33,6 +33,7 @@ export const MAX_ENTITIES = 500;
 
 export const GAME_TYPES = {
   REACH: 'reach',
+  RISK: 'risk',
   // Add your game types here:
   // COLLECT: 'collect',
   // SURVIVAL: 'survival',

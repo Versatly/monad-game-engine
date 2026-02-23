@@ -66,6 +66,20 @@ export const TEMPLATES = {
       { type: 'trigger', position: [0, 7, -16], size: [3, 3, 3], properties: { color: '#f1c40f', rotating: true, speed: 2, isGoal: true } },
     ],
   },
+
+  risk: {
+    name: 'World Domination (Risk)',
+    gameType: 'risk',
+    floorType: 'none',
+    respawnPoint: [0, 2, 30],
+    environment: {
+      skyColor: '#0d2034',
+      fogColor: '#0d2034',
+      ambientIntensity: 0.6,
+      sunIntensity: 0.9,
+    },
+    entities: [],
+  },
 };
 
 /**

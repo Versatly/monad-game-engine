@@ -19,6 +19,10 @@ export function mountAgentRoutes(router, ctx) {
       lastActivity: p.lastActivity
     }));
 
+    const riskState = arena.currentMiniGame?.type === 'risk'
+      ? arena.currentMiniGame.getStatus()?.riskState || ws.gameState.riskState || null
+      : ws.gameState.riskState || null;
+
     const allMessages = ws.getMessages(sinceMessage);
     const spectatorCount = players.filter(p => p.state === 'spectating').length;
 
@@ -47,7 +51,8 @@ export function mountAgentRoutes(router, ctx) {
       lastGameType: ws.lastGameType || null,
       lastGameEndTime: ws.lastGameEndTime || null,
       gameHistory: ws.gameHistory.map(g => ({ type: g.type, template: g.template })),
-      lastTemplate: ws.lastTemplate || null
+      lastTemplate: ws.lastTemplate || null,
+      riskState
     });
   });
 

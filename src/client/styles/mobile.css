@@ -73,6 +73,13 @@
   .bribe-btn { padding: 8px 16px; font-size: 12px; }
   .announcement { font-size: 14px; padding: 10px 20px; }
   #announcements { top: 100px; }
+  #risk-panel {
+    width: 220px;
+    left: 10px;
+    top: 62px;
+    padding: 8px 9px;
+  }
+  #risk-panel .risk-player-list { max-height: 110px; }
   #chat-toggle-btn {
     display: block;
     position: fixed; bottom: 10px; left: 10px;
@@ -107,6 +114,12 @@
   }
   #chat-messages { max-height: 100px !important; }
   #announcements { top: 70px !important; }
+  #risk-panel {
+    top: 58px !important;
+    width: 210px !important;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
   .announcement { font-size: 12px !important; padding: 6px 14px !important; }
   #bribe-panel { bottom: 80px !important; }
   #chat-toggle-btn { bottom: 80px !important; left: 10px !important; }

@@ -43,6 +43,7 @@ import { keys, setupKeyboardInput, toggleHelpOverlay } from './input/InputManage
 import { setupMobileControls } from './input/MobileControls.js';
 import { createScene } from './SceneSetup.js';
 import { initConnectionManager, connectToServer, reconnectToServer } from './ConnectionManager.js';
+import { initRiskClient } from './games/RiskClient.js';
 
 window.__gameState = state;
 window.debugAuth = debugAuth;
@@ -126,6 +127,7 @@ async function init() {
   initConnectionManager({ clearSpectating: () => cameraController.clearSpectating() });
   initNetworkManager({ connectToServerFn: connectToServer, reconnectToServerFn: reconnectToServer });
   initFloorManager({ scene, ground, gridHelper, ambientLight, directionalLight });
+  initRiskClient({ camera, domElement: renderer.domElement });
 
   if (isSpectator) {
     auth.user = { token: null, user: { name: 'Spectator', type: 'spectator' } };

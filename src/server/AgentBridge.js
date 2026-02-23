@@ -73,6 +73,29 @@ export class AgentBridge {
     }
     parts.push(`- Games played this session: ${context.gamesPlayed}`);
 
+    if (context.gameState.gameType === 'risk' && context.gameState.riskState) {
+      const risk = context.gameState.riskState;
+      parts.push(`\n**Risk State**:`);
+      parts.push(`- Turn ${risk.turnNumber} | Phase: ${risk.phase}`);
+      parts.push(`- Active player: ${risk.activePlayerName || risk.activePlayerId}`);
+      parts.push(`- Reinforcement pool: ${risk.reinforcementPool}`);
+
+      if (Array.isArray(risk.players) && risk.players.length > 0) {
+        const playerLine = risk.players
+          .map((p) => `${p.name} (${p.territories}T/${p.cardCount}C${p.eliminated ? ', out' : ''})`)
+          .join(', ');
+        parts.push(`- Risk players: ${playerLine}`);
+      }
+
+      const controlledContinents = [];
+      for (const [continentId, info] of Object.entries(risk.continents || {})) {
+        if (info?.ownerName) controlledContinents.push(`${info.name}: ${info.ownerName}`);
+      }
+      if (controlledContinents.length > 0) {
+        parts.push(`- Controlled continents: ${controlledContinents.join(' | ')}`);
+      }
+    }
+
     if (context.recentChat.length > 0) {
       parts.push(`\n**Recent Chat**:`);
       for (const msg of context.recentChat.slice(-10)) {

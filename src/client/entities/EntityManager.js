@@ -7,7 +7,12 @@
 import * as THREE from 'three/webgpu';
 import { entityMeshes, groupParents, pendingGroups, entityToGroup, state } from '../state.js';
 import { shortAngleDist } from '../math.js';
-import { createEntityMesh, getGeometry, clearGeometryCache } from './EntityFactory.js';
+import {
+  createEntityMesh,
+  getGeometry,
+  clearGeometryCache,
+  syncRiskEntityOverlays,
+} from './EntityFactory.js';
 import { ANIMATION_BEHAVIORS } from './EntityBehaviors.js';
 import { clearMaterialCache } from '../ToonMaterials.js';
 import { spatialHashInsert, spatialHashUpdate, spatialHashRemove, spatialHashClear } from '../physics/SpatialHash.js';
@@ -174,6 +179,7 @@ export function updateEntity(entity) {
   mesh.userData.entity = entity;
   mesh.userData.rotating = entity.properties?.rotating;
   mesh.userData.speed = entity.properties?.speed || 1;
+  syncRiskEntityOverlays(mesh, entity);
 
   state.entities.set(entity.id, entity);
   spatialHashUpdate(entity.id, entity.position[0], entity.position[2]);
@@ -215,6 +221,7 @@ export function removeEntity(id) {
 
     const isSharedMaterial = child === mesh && !mesh.userData._materialCloned;
     if (!isSharedMaterial) {
+      if (child.material.map) child.material.map.dispose();
       child.material.dispose();
     }
   });
@@ -230,7 +237,10 @@ export function clearAllEntities() {
   for (const mesh of entityMeshes.values()) {
     _scene.remove(mesh);
     mesh.traverse((child) => {
-      if (child.material) child.material.dispose();
+      if (child.material) {
+        if (child.material.map) child.material.map.dispose();
+        child.material.dispose();
+      }
     });
   }
   entityMeshes.clear();

@@ -668,6 +668,97 @@ body {
   box-shadow: 0 3px 0 var(--border);
 }
 
+/* Risk */
+#risk-panel {
+  position: fixed;
+  top: 70px;
+  left: 20px;
+  z-index: 155;
+  width: 280px;
+  background: rgba(10, 20, 34, 0.94);
+  border: var(--border-w) solid var(--border);
+  border-left: 5px solid var(--cyan);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  color: var(--text);
+  box-shadow: 0 3px 0 var(--border);
+}
+#risk-panel .risk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+#risk-panel .risk-title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+#risk-panel .risk-phase {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+#risk-panel .risk-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+#risk-panel .risk-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  min-height: 32px;
+  line-height: 1.35;
+}
+#risk-panel .risk-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+#risk-panel .risk-buttons button {
+  flex: 1;
+  background: var(--bg-mid);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+#risk-panel .risk-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#risk-panel .risk-player-list {
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+#risk-panel .risk-player-row {
+  border-left: 4px solid var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 5px;
+  padding: 4px 6px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+#risk-panel .risk-player-row .name {
+  font-weight: 700;
+}
+#risk-panel .risk-player-row .meta {
+  color: var(--text-dim);
+}
+#risk-panel .risk-player-row.eliminated {
+  opacity: 0.45;
+}
+
 /* ============================================
    Chat Panel
    ============================================ */

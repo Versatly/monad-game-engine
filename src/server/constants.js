@@ -16,6 +16,7 @@ export const AFK_CHECK_INTERVAL = 5000;
 export const ALL_TEMPLATES = [
   'simple_arena',
   'obstacle_course',
+  'risk',
 ];
 
 export const NEW_TYPE_TEMPLATES = [];

@@ -132,6 +132,147 @@ export function clearGeometryCache() {
   _goalGlowGeoCache.clear();
 }
 
+function _drawRoundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function _createTextSpriteTexture(text, {
+  width = 256,
+  height = 128,
+  background = '#2c3e50',
+  color = '#ffffff',
+  stroke = '#0d0520',
+  fontSize = 28,
+  padding = 16,
+} = {}) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, width, height);
+
+  _drawRoundedRect(ctx, padding / 2, padding / 2, width - padding, height - padding, 18);
+  ctx.fillStyle = background;
+  ctx.globalAlpha = 0.92;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = stroke;
+  ctx.stroke();
+
+  const lines = String(text || '').split('\n').slice(0, 2);
+  ctx.font = `700 ${fontSize}px Nunito, sans-serif`;
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (lines.length === 1) {
+    ctx.fillText(lines[0], width / 2, height / 2);
+  } else {
+    const spacing = Math.max(20, fontSize * 0.95);
+    const startY = height / 2 - spacing / 2;
+    for (let i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], width / 2, startY + i * spacing);
+    }
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function _updateTextSprite(mesh, key, {
+  text,
+  background,
+  color = '#ffffff',
+  scale = [3.4, 1.7, 1],
+  fontSize = 26,
+}) {
+  let sprite = mesh.userData[key];
+  const prevText = sprite?.userData?.text;
+  const prevBg = sprite?.userData?.background;
+  const prevColor = sprite?.userData?.color;
+  if (sprite && prevText === text && prevBg === background && prevColor === color) return sprite;
+
+  const map = _createTextSpriteTexture(text, {
+    background,
+    color,
+    fontSize,
+  });
+
+  if (!sprite) {
+    const material = new THREE.SpriteMaterial({
+      map,
+      transparent: true,
+      depthWrite: false,
+      depthTest: true,
+    });
+    sprite = new THREE.Sprite(material);
+    sprite.center.set(0.5, 0.5);
+    mesh.add(sprite);
+    mesh.userData[key] = sprite;
+  } else {
+    const oldMap = sprite.material?.map;
+    if (sprite.material) sprite.material.map = map;
+    if (oldMap) oldMap.dispose();
+  }
+
+  sprite.scale.set(scale[0], scale[1], scale[2] || 1);
+  sprite.userData = {
+    ...(sprite.userData || {}),
+    text,
+    background,
+    color,
+  };
+  return sprite;
+}
+
+export function syncRiskEntityOverlays(mesh, entity) {
+  const props = entity.properties || {};
+
+  if (props.isRiskLabel) {
+    // Hide anchor mesh; render only billboard label.
+    mesh.material.transparent = true;
+    mesh.material.opacity = 0;
+    mesh.material.depthWrite = false;
+
+    _updateTextSprite(mesh, 'riskLabelSprite', {
+      text: props.text || '',
+      background: props.bgColor || '#2c3e50',
+      color: '#ffffff',
+      scale: [3.9, 2.0, 1],
+      fontSize: 24,
+    });
+  }
+
+  if (props.riskDieValue !== undefined && props.riskDieValue !== null) {
+    _updateTextSprite(mesh, 'riskDieSprite', {
+      text: String(props.riskDieValue),
+      background: props.riskDieSide === 'defender' ? '#202020' : '#ffffff',
+      color: props.riskDieSide === 'defender' ? '#ffffff' : '#202020',
+      scale: [1.05, 1.05, 1],
+      fontSize: 42,
+    });
+    const dieSprite = mesh.userData.riskDieSprite;
+    if (dieSprite) dieSprite.position.set(0, 0, 0.48);
+  }
+}
+
 // ─── Mesh Creation ───────────────────────────────────────────
 export function createEntityMesh(entity) {
   const geometry = getGeometry(entity);
@@ -186,6 +327,8 @@ export function createEntityMesh(entity) {
     );
     mesh.add(goalGlow);
   }
+
+  syncRiskEntityOverlays(mesh, entity);
 
   return mesh;
 }

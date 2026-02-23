@@ -22,6 +22,13 @@ export const GAME_TYPES = {
     hasTimer: true,
     defaultTimeLimit: 60000
   },
+  risk: {
+    name: 'Risk',
+    description: 'Classic territory conquest with reinforcements, battles, and cards',
+    minPlayers: 1,
+    hasTimer: true,
+    defaultTimeLimit: 4 * 60 * 60 * 1000
+  },
   // Add your game types here:
   // collect: { name: 'Collect-a-thon', description: '...', minPlayers: 1, hasTimer: true, defaultTimeLimit: 45000 },
 };
@@ -317,7 +324,10 @@ export class MiniGame {
   }
 
   _randomizeTimeLimit(type) {
-    const ranges = { reach: [40000, 75000] };
+    const ranges = {
+      reach: [40000, 75000],
+      risk: [3 * 60 * 60 * 1000, 4 * 60 * 60 * 1000],
+    };
     const [min, max] = ranges[type] || [45000, 75000];
     return min + Math.floor(Math.random() * (max - min));
   }

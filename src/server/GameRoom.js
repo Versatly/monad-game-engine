@@ -213,6 +213,35 @@ export class GameRoom extends Room {
       }
     });
 
+    // Risk turn actions (reinforce, attack, fortify, end_phase, trade_cards...)
+    this.onMessage('risk_action', (client, data) => {
+      if (!this.worldState) return;
+      if (this._isSpectator(client)) return;
+
+      const game = this.currentMiniGame;
+      if (!game?.isActive || game.type !== 'risk' || typeof game.handlePlayerAction !== 'function') {
+        client.send('chat_error', { error: 'Risk game is not active' });
+        return;
+      }
+
+      if (!data || typeof data.type !== 'string') {
+        client.send('chat_error', { error: 'Invalid risk action payload' });
+        return;
+      }
+
+      this.worldState.recordPlayerActivity(client.sessionId);
+      const result = game.handlePlayerAction(client.sessionId, data);
+      client.send('risk_action_result', result);
+
+      if (!result?.ok) {
+        client.send('chat_error', { error: result?.error || 'Risk action failed' });
+        return;
+      }
+
+      // Push updated game state immediately for responsive UI.
+      this.broadcast('game_state_changed', this.worldState.getGameState());
+    });
+
     // Player chat messages
     this.onMessage('chat', (client, data) => {
       if (!this.worldState || !data.text) return;

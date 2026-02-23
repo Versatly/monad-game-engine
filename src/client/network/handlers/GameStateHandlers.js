@@ -10,12 +10,14 @@ import { showToast } from '../../ui/Announcements.js';
 import { triggerCameraShake, screenFlash, showVignette, spawnParticles } from '../../vfx/ScreenEffects.js';
 import { playCountdownBeep, playWinFanfare, playCollectSound } from '../../audio/SoundManager.js';
 import { applyWorldState } from '../HttpApi.js';
+import { applyRiskStateFromGameState } from '../../games/RiskClient.js';
 
 export function registerGameStateHandlers(room, { clearSpectating }) {
   room.onMessage('game_state_changed', (gameState) => {
     console.log('[Event] Game state changed:', gameState.phase);
     const prevPhase = state.gameState.phase;
     state.gameState = gameState;
+    applyRiskStateFromGameState(gameState);
     updateGameStateUI();
 
     if (gameState.phase !== 'lobby') {
@@ -100,6 +102,7 @@ export function registerGameStateHandlers(room, { clearSpectating }) {
   room.onMessage('init', (data) => {
     console.log('[Init] Received initial state from room');
     applyWorldState(data.worldState);
+    applyRiskStateFromGameState(data.worldState?.gameState || null);
     state.lobbyCountdownTarget = data.lobbyCountdown || null;
     updateUI();
 

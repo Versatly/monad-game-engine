@@ -5,7 +5,7 @@
  * No manual time uniform updates needed — TSL handles it.
  */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import {
   Fn, float, vec2, vec3, vec4,
   uv, positionLocal, time,

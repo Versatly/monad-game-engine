@@ -3,7 +3,7 @@
  * Provides soft-circle opacity node (no texture needed).
  */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { uv, smoothstep, float, color as colorNode, instancedBufferAttribute } from 'three/tsl';
 
 /**

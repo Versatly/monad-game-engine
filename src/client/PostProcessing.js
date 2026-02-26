@@ -11,7 +11,7 @@
  * Recover: >55fps for 15s → raise one tier (capped by maxTier)
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { toonOutlinePass } from 'three/tsl';
 import { bloom } from 'three/addons/tsl/display/BloomNode.js';
 import { fxaa } from 'three/addons/tsl/display/FXAANode.js';

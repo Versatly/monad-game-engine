@@ -4,7 +4,7 @@
  * Entity lifecycle, group assembly, and per-frame animations.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { entityMeshes, groupParents, pendingGroups, entityToGroup, state } from '../state.js';
 import { shortAngleDist } from '../math.js';
 import {

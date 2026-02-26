@@ -3,7 +3,7 @@
  * Receives scene reference via initScreenEffects().
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { cameraShake, particles } from '../state.js';
 import { getParticleBudget } from '../PostProcessing.js';
 import { createParticleMaterial } from './ParticleUtils.js';

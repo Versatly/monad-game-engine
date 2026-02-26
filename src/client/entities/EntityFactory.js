@@ -6,7 +6,7 @@
  * BufferGeometry instance. Callers must NOT dispose cached geometries directly.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { GEOMETRY_TEMPLATES } from '../GeometryTemplates.js';
 import { createEntityToonMaterial, getEntityColor } from '../ToonMaterials.js';
 import { createWindShaderMaterial, registerConveyorMaterial } from '../SurfaceShaders.js';

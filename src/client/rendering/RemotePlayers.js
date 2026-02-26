@@ -2,7 +2,7 @@
  * Remote Players — remote player meshes, name sprites, chat bubbles, interpolation.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { remotePlayers, player, state } from '../state.js';
 import { shortAngleDist } from '../math.js';
 import { createRemotePlayerCharacter } from '../PlayerVisuals.js';

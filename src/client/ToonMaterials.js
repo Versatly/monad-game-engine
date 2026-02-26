@@ -12,7 +12,7 @@
  * mutated per-frame.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { getProceduralTexture, generateNormalMap, getNormalMapType } from './ProceduralTextures.js';
 
 function createGradientTexture(steps) {

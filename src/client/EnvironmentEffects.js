@@ -7,7 +7,7 @@
  * Sky dome uses TSL NodeMaterial — no manual time uniform needed.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import {
   Fn, vec2, vec3,
   uniform, normalize, positionWorld,

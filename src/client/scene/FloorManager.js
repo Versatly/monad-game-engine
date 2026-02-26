@@ -2,7 +2,7 @@
  * Floor and environment management — lava floor, hazard plane, environment settings.
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { floor, hazardPlaneState } from '../state.js';
 import { createLavaShaderMaterial, createWaterShaderMaterial } from '../SurfaceShaders.js';
 import { updateSkyColors, initParticles, selectParticleType } from '../EnvironmentEffects.js';

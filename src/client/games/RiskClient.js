@@ -6,7 +6,7 @@
  * - Sends risk_action messages to server
  */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { state, entityMeshes } from '../state.js';
 import { sendToServer } from '../network/NetworkManager.js';
 

@@ -5,7 +5,7 @@
 
 import './styles/game.css';
 import './styles/mobile.css';
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 
 import { renderFrame } from './PostProcessing.js';
 import { updateConveyorScrolls } from './SurfaceShaders.js';

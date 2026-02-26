@@ -15,7 +15,6 @@
     "@colyseus/ws-transport": "^0.15.0",
     "@privy-io/react-auth": "^3.13.1",
     "@privy-io/server-auth": "^1.32.5",
-    "@rollup/rollup-linux-x64-gnu": "^4.59.0",
     "buffer": "^6.0.3",
     "cannon-es": "^0.20.0",
     "colyseus": "^0.15.0",

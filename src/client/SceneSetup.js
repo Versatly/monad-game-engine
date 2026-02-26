@@ -21,7 +21,7 @@ export async function createScene() {
   camera.position.set(0, 10, 30);
 
   const forceWebGL = urlParams.get('forceWebGL') === 'true';
-  const renderer = new THREE.WebGPURenderer({ antialias: true, forceWebGL: true });
+  const renderer = new THREE.WebGPURenderer({ antialias: true, forceWebGL });
   await renderer.init();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
